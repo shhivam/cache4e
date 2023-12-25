@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/joho/godotenv"
+	"log"
 	"os"
 	"shivamsinghal.me/caching4e/internal/app"
 	"shivamsinghal.me/caching4e/internal/app/postgres"
@@ -25,5 +26,5 @@ func main() {
 	ginEngine := app.NewRouter(redisDB, postgresDB)
 
 	ginEngine.Run()
-
+	log.Println("Server running..")
 }
