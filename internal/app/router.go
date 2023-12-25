@@ -15,5 +15,10 @@ func NewRouter(redisDB *redis.Client, postgresDB *sql.DB) *gin.Engine {
 		controllers.HealthcheckDB(c, redisDB, postgresDB)
 	})
 
+	r.GET("/users/:username",
+		func(c *gin.Context) {
+			controllers.GetUser(c, postgresDB)
+		})
+
 	return r
 }
