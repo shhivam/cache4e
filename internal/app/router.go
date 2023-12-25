@@ -19,6 +19,9 @@ func NewRouter(redisDB *redis.Client, postgresDB *sql.DB) *gin.Engine {
 		func(c *gin.Context) {
 			controllers.GetUser(c, postgresDB)
 		})
+	r.GET("/cached-users/:username", func(c *gin.Context) {
+		controllers.GetCachedUser(c, redisDB, postgresDB)
+	})
 
 	return r
 }
