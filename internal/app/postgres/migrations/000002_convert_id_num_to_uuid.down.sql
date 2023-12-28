@@ -1,0 +1,3 @@
+-- Before running the down migration, keep in mind about the data migration.
+-- ALTER TABLE users
+--     ALTER COLUMN id TYPE serial;
