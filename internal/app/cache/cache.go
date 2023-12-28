@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"time"
@@ -40,4 +41,33 @@ func ReadThroughCache(
 		err := json.Unmarshal([]byte(result), &dataStruct)
 		return err
 	}
+}
+
+func WriteThroughCache(
+	c *gin.Context,
+	redisDB *redis.Client,
+	postgresDB *sql.DB,
+	data interface{},
+	cacheKey string,
+	dbInsertFunction func(*gin.Context, *sql.DB, interface{}) error,
+) error {
+	// Insert into on-disk DB i.e. postgres
+	err := dbInsertFunction(c, postgresDB, data)
+	if err != nil {
+		return err
+	}
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	// insert into in-memory DB i.e. redis
+	_, err = redisDB.Set(c, cacheKey, jsonData, 0).Result()
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
