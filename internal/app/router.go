@@ -23,5 +23,9 @@ func NewRouter(redisDB *redis.Client, postgresDB *sql.DB) *gin.Engine {
 		controllers.GetCachedUser(c, redisDB, postgresDB)
 	})
 
+	r.POST("/users", func(c *gin.Context) {
+		controllers.CreateUser(c, redisDB, postgresDB)
+	})
+
 	return r
 }
